@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: "https://ecommerce-k42q.onrender.com/api/",
 });
 
 // An interceptor to handle expired or invalid tokens

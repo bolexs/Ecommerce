@@ -42,8 +42,8 @@ const createProduct = async (req, res) => {
         });
       }
 
-      const image = req.file ? req.file.path : null;
-      console.log(image);
+      const imageUrl = req.file ? req.file.path : null;
+      console.log(imageUrl);
 
       // Ensure the image is uploaded
       if (!image) {
@@ -55,7 +55,7 @@ const createProduct = async (req, res) => {
       }
       let product = new Product({
         name,
-        image: image,
+        image: imageUrl,
         price,
         description,
         createdBy: req.user.id,
@@ -67,7 +67,7 @@ const createProduct = async (req, res) => {
         responseMessage: "Product created successfully",
         data: {
           name,
-          image: image,
+          image: imageUrl,
           price,
           description,
           createdBy: user.username,
