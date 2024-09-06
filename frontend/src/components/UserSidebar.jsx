@@ -1,5 +1,8 @@
 import { NavLink } from "react-router-dom";
-const Sidebar = () => {
+import useLogout from "../customHooks/useLogout";
+
+const UserSidebar = () => {
+  const { logout } = useLogout();
   return (
     <div>
       <div className="flex flex-col items-center justify-center w-[250px] h-[100vh] bg-[#f5f5f5]">
@@ -9,24 +12,33 @@ const Sidebar = () => {
         <div className="mt-10">
           <ul>
             <li className="mb-5">
-              <NavLink href="#" className="text-[#1677ff]">
+              <NavLink to="/admin/" className="text-[#1677ff]">
                 Dashboard
               </NavLink>
             </li>
             <li className="mb-5">
-              <NavLink href="#" className="text-[#1677ff]">
-                profile
+              <NavLink to="/admin/profile" className="text-[#1677ff]">
+                Profile
+              </NavLink>
+            </li>
+
+            <li className="mb-5">
+              <NavLink to="/admin/products" className="text-[#1677ff]">
+                Products
               </NavLink>
             </li>
             <li className="mb-5">
-              <NavLink href="#" className="text-[#1677ff]">
-                settings
+              <NavLink to="/admin/settings" className="text-[#1677ff]">
+                Settings
               </NavLink>
             </li>
             <li className="mb-5">
-              <NavLink href="#" className="text-[#1677ff]">
-                log out
-              </NavLink>
+              <button
+                onClick={logout}
+                className="text-[#1677ff] bg-transparent border-0 cursor-pointer"
+              >
+                Logout
+              </button>
             </li>
           </ul>
         </div>
@@ -35,4 +47,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default UserSidebar;

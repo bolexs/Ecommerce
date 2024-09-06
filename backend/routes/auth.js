@@ -14,8 +14,11 @@ import {
   getAllUsers,
   // TempPromoteToAdmin,
 } from "../controllers/admin.js";
-import { editPassword, editProfile } from "../controllers/userSettings.js";
-import upload from "../utils/imageUpload.js";
+import {
+  editPassword,
+  editProfile,
+  getProfile,
+} from "../controllers/userSettings.js";
 
 const authRouter = express.Router();
 
@@ -24,16 +27,13 @@ authRouter.post("/register", registration);
 authRouter.post("/login", login);
 authRouter.get("/dashboard", authenticateAndAuthorize(), dashboard);
 
+authRouter.get("/get-profile", authenticateAndAuthorize(), getProfile);
+
 authRouter.put("/update-profile", authenticateAndAuthorize(), editProfile);
 
 authRouter.put("/update-password", authenticateAndAuthorize(), editPassword);
 
-authRouter.post(
-  "/create-product",
-  upload,
-  authenticateAndAuthorize(),
-  createProduct
-);
+authRouter.post("/create-product", authenticateAndAuthorize(), createProduct);
 
 authRouter.get("/products", authenticateAndAuthorize(), getAllProducts);
 

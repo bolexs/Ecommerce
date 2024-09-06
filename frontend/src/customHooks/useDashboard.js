@@ -8,14 +8,17 @@ export const useDashboard = () => {
   const [totalProducts, setTotalProducts] = useState(0);
   const [loading, setLoading] = useState(true);
   const { onNotify } = useNotification();
-
   const hasNotified = useRef(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const token = sessionStorage.getItem("***");
+        const token = sessionStorage.getItem("token"); // Retrieve token from sessionStorage
+
+        if (!token) {
+          throw new Error("No token found");
+        }
 
         const headers = {
           Authorization: `Bearer ${token}`,
@@ -30,7 +33,11 @@ export const useDashboard = () => {
         setTotalProducts(totalProducts);
 
         if (!hasNotified.current) {
-          onNotify("success", "Data Loaded", response?.data?.responseMessage);
+          onNotify(
+            "success",
+            "Data Loaded",
+            response.data.responseMessage || "Data loaded successfully"
+          );
           hasNotified.current = true;
         }
       } catch (error) {
@@ -46,7 +53,7 @@ export const useDashboard = () => {
     };
 
     fetchData();
-  }, []);
+  }, [onNotify]);
 
   return { totalUsers, totalProducts, loading };
 };

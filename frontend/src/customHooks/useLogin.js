@@ -3,6 +3,7 @@ import { axiosInstance } from "../api/axiosInstance.config";
 import { endpoints } from "../api/endpoints";
 import useNotification from "./useNotification";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -18,9 +19,13 @@ const useLogin = () => {
 
       if (response.data?.responseCode === "00") {
         onNotify("success", "Successful", response?.data?.responseMessage);
-        sessionStorage.setItem("***", response.data?.data?.token);
+        const token = response.data?.data?.token;
+        sessionStorage.setItem("token", token);
+
+        const decodedToken = jwtDecode(token);
+        const redirectPath = decodedToken.isAdmin ? "/admin" : "/user";
         setTimeout(() => {
-          return navigate("/admin/", {
+          return navigate(redirectPath, {
             replace: true,
           });
         }, 2000);
