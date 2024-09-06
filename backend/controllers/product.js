@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { apiResponseCode } from "../helper.js";
 import Product from "../models/Product.js";
-import upload from "../utils/imageUpload.js";
+import { upload, cloudinary } from "../utils/imageUpload.js";
 import User from "../models/User.js";
 const createProduct = async (req, res) => {
   upload(req, res, async (err) => {
@@ -12,10 +12,12 @@ const createProduct = async (req, res) => {
         data: null,
       });
     }
+    console.log(req.file);
+    console.log(req.body);
 
     const productSchema = Joi.object({
       name: Joi.string().max(80).required(),
-      image: Joi.string().allow(""),
+      // image: Joi.string().allow(""),
       price: Joi.number().positive().required(),
       description: Joi.string().min(4).max(100).required(),
     });
@@ -29,7 +31,7 @@ const createProduct = async (req, res) => {
         });
       }
 
-      let { name, image, price, description } = req.body;
+      let { name, price, description } = req.body;
       const user = await User.findById(req.user.id).select("username").lean();
 
       if (!user) {
@@ -40,11 +42,20 @@ const createProduct = async (req, res) => {
         });
       }
 
-      image = req.file ? `/images/${req.file.filename}` : null;
-      console.log(image);
+      const imageUrl = req.file ? req.file.path : null;
+      console.log(imageUrl);
+
+      // Ensure the image is uploaded
+      if (!image) {
+        return res.status(400).json({
+          responseCode: apiResponseCode.BAD_REQUEST,
+          responseMessage: "Image is required. Please upload a valid image.",
+          data: null,
+        });
+      }
       let product = new Product({
         name,
-        image: image,
+        image: imageUrl,
         price,
         description,
         createdBy: req.user.id,

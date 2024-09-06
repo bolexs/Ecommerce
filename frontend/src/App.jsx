@@ -2,31 +2,29 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import { App as AntdApp } from "antd";
-import Dashboard from "./views/admin/Dashboard";
-// import Dashboard1 from "./views/users/Dashboard";
+import AdminDashboard from "./views/admin/AdminDashboard";
+import AdminSettings from "./views/admin/AdminSettings";
+import UserDashboard from "./views/user/UserDashboard";
 import ProtectedRoutes from "./ProtectedRoutes";
-import AdminLayout from "./layout/AdminLayout";
-import UserLayout from "./layout/UserLayout";
-import Profile from "./views/admin/Profile";
+import AdminLayout from "./layouts/AdminLayout";
+import UserLayout from "./layouts/UserLayout";
+import UserProfile from "./views/user/UserProfile";
 import Product from "./views/admin/Product";
-import Settings from "./views/admin/Settings";
-// import Users from "./views/admin/Users";
-import UserProfile from "./views/users/UserProfile";
-import UserProducts from "./views/users/UserProducts";
-import UserSettings from "./views/users/UserSettings";
+import Users from "./views/admin/Users";
+import AdminProfile from "./views/admin/AdminProfile";
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      Component: Login,
+      element: <Login />,
     },
     {
       path: "/register",
-      Component: Register,
+      element: <Register />,
     },
     {
-      path: "/admin/",
+      path: "/admin",
       element: (
         <ProtectedRoutes>
           <AdminLayout />
@@ -35,53 +33,50 @@ const App = () => {
       children: [
         {
           index: true,
-          element: <Dashboard />,
+          element: <AdminDashboard />,
         },
         {
-          path: "/admin/profile",
-          element: <Profile />,
+          path: "/admin/settings",
+          element: <AdminSettings />,
         },
         {
           path: "/admin/products",
           element: <Product />,
         },
         {
-          path: "/admin/settings",
-          element: <Settings />,
+          path: "/admin/users",
+          element: <Users />,
         },
-        // {
-        //   path: "/admin/users",
-        //   element: <Users />,
-        // },
+        {
+          path: "/admin/profile",
+          element: <AdminProfile />,
+        },
       ],
     },
     {
-      path: "/users/",
+      path: "/user",
       element: (
         <ProtectedRoutes>
           <UserLayout />
         </ProtectedRoutes>
       ),
       children: [
-        // {
-        //   index: true,
-        //   element: <Dashboard1 />,
-        // },
         {
-          path: "/users/userprofile",
+          index: true,
+          element: <UserDashboard />,
+        },
+        {
+          path: "/user/profile",
           element: <UserProfile />,
-        },
-        {
-          path: "/users/usersproducts",
-          element: <UserProducts />,
-        },
-        {
-          path: "/users/usersettings",
-          elements: <UserSettings />,
         },
       ],
     },
+    {
+      path: "*",
+      element: <h1>404 Not Found</h1>,
+    },
   ]);
+
   return (
     <AntdApp>
       <RouterProvider router={router} />

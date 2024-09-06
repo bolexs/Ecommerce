@@ -2,6 +2,40 @@ import User from "../models/User.js";
 import { apiResponseCode } from "../helper.js";
 import bcrypt from "bcryptjs";
 
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById({ _id: userId });
+
+    if (!user) {
+      return res.status(404).json({
+        responseCode: apiResponseCode.NOT_FOUND,
+        responseMessage: "User not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      responseCode: apiResponseCode.SUCCESSFUL,
+      responseMessage: "Profile fetched successfully",
+      data: {
+        fullName: user.fullName,
+        phoneNumber: user.phoneNumber,
+        username: user.username,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      responseCode: apiResponseCode.INTERNAL_SERVER_ERR,
+      responseMessage: "Internal server error",
+      data: null,
+    });
+  }
+};
+
 const editProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -97,4 +131,4 @@ const editPassword = async (req, res) => {
   }
 };
 
-export { editProfile, editPassword };
+export { editProfile, editPassword, getProfile };
