@@ -10,6 +10,11 @@ app.use(express.json());
 app.use(cors());
 
 //Routes
+
+app.get("/alive", (req, res) => {
+  res.json({ status: "alive", message: "Service is running" });
+});
+
 app.use("/api/auth", authRouter);
 
 dbConnection();
